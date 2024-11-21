@@ -25,6 +25,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.updateUser = exports.createUser = exports.getUserById = exports.getAllUsers = void 0;
 const userService = __importStar(require("@services/user.service"));
+const errors_1 = require("../utils/errors");
 const getAllUsers = (req, res) => {
     const users = userService.getAllUsers();
     res.json(users);
@@ -45,8 +46,7 @@ const createUser = (req, res, next) => {
     try {
         const { id, name, email } = req.body;
         if (!id || !name || !email) {
-            res.status(400).json({ message: "All fields are required" });
-            return;
+            next(new errors_1.BadRequestError("Missing required fields"));
         }
         const newUser = { id, name, email };
         const createdUser = userService.createUser(newUser);

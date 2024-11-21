@@ -1,25 +1,37 @@
-export class CustomError extends Error {
-  statusCode: number;
+export type ErrorDetails = Record<string, string | string[]>;
 
-  constructor(message: string, statusCode: number) {
+export class CustomError extends Error {
+  status: number;
+  details: ErrorDetails;
+
+  constructor(message: string, status: number, details: ErrorDetails = {}) {
     super(message);
-    this.statusCode = statusCode;
+    this.status = status;
+    this.details = details;
 
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, this.constructor);
     }
   }
+
+  toJSON() {
+    return {
+      status: this.status,
+      message: this.message,
+      details: this.details,
+    };
+  }
 }
 
 export class NotFoundError extends CustomError {
-  constructor(message = "Not Found") {
-    super(message, 404);
+  constructor(message = "Not Found", details?: ErrorDetails) {
+    super(message, 404, details);
   }
 }
 
 export class BadRequestError extends CustomError {
-  constructor(message = "Bad Request") {
-    super(message, 400);
+  constructor(message = "Bad Request", details?: ErrorDetails) {
+    super(message, 400, details);
   }
 }
 

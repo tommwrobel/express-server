@@ -2,24 +2,32 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.InternalServerError = exports.ForbiddenError = exports.UnauthorizedError = exports.BadRequestError = exports.NotFoundError = exports.CustomError = void 0;
 class CustomError extends Error {
-    constructor(message, statusCode) {
+    constructor(message, status, details = {}) {
         super(message);
-        this.statusCode = statusCode;
+        this.status = status;
+        this.details = details;
         if (Error.captureStackTrace) {
             Error.captureStackTrace(this, this.constructor);
         }
     }
+    toJSON() {
+        return {
+            status: this.status,
+            message: this.message,
+            details: this.details,
+        };
+    }
 }
 exports.CustomError = CustomError;
 class NotFoundError extends CustomError {
-    constructor(message = "Not Found") {
-        super(message, 404);
+    constructor(message = "Not Found", details) {
+        super(message, 404, details);
     }
 }
 exports.NotFoundError = NotFoundError;
 class BadRequestError extends CustomError {
-    constructor(message = "Bad Request") {
-        super(message, 400);
+    constructor(message = "Bad Request", details) {
+        super(message, 400, details);
     }
 }
 exports.BadRequestError = BadRequestError;

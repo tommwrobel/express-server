@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.updateUser = exports.createUser = exports.getUserById = exports.getAllUsers = void 0;
 const errors_1 = require("../utils/errors");
-let users = [
+const users = [
     {
         id: "1",
         name: "John Doe",
@@ -21,7 +21,7 @@ exports.getAllUsers = getAllUsers;
 const getUserById = (id) => {
     const user = users.find((user) => user.id === id);
     if (!user) {
-        throw new errors_1.NotFoundError(`User with id ${id} not found`);
+        throw new errors_1.NotFoundError(`User not found`, { userId: id });
     }
     return users.find((user) => user.id === id);
 };
